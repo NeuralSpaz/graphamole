@@ -46,8 +46,8 @@ func parseTag(tag string) (string, optionTags) {
 }
 
 // written so that future operators are easier to add
-var invalidCtlRunes = "!#$%&()*+./:<=>?@[]^_{|}~ " // including space rune
-var validCtlRunes = ",-"                           // comma dash(future use)
+var invalidCtlRunes = "!#$%&()+./:*=?@[]^_{|}~ " // including space rune
+var validCtlRunes = "<>,-"                       // comma dash(future use)
 
 func isValidTag(s string) bool {
 	if s == "" {
