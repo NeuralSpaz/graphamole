@@ -55,7 +55,7 @@ func splitTag(tag string) (string, optionTags) {
 	if tags := strings.Split(tag, ","); len(tags) > 1 {
 		return tags[0], optionTags(tags[1:])
 	}
-	return tag, optionTags([]string{})
+	return tag, optionTags{}
 }
 
 func validateTag(s string) error {
@@ -68,7 +68,9 @@ func validateTag(s string) error {
 		case strings.ContainsRune(invalidCtlRunes, c):
 			return ErrInvaidCharInStructTag
 		default:
-			if !unicode.IsLetter(c) && !unicode.IsDigit(c) && !strings.ContainsRune(validCtlRunes, c) {
+			if !unicode.IsLetter(c) &&
+				!unicode.IsDigit(c) &&
+				!strings.ContainsRune(validCtlRunes, c) {
 				return ErrInvaidCharInStructTag
 			}
 		}
