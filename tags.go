@@ -7,9 +7,8 @@ import (
 	"unicode"
 )
 
-const (
-	StructTAG = "mole"
-)
+// StructTagString modify to suit your struct tag scheme
+const StructTagString = "mole"
 
 // written so that future operators are easier to add
 const (
@@ -17,19 +16,19 @@ const (
 	validCtlRunes   = "<>,-"                     // comma dash(future use)
 )
 
-var (
-	// ErrInvaidCharInStructTag is returned if struct tag contains any invalid runes
-	// character in struct tag must be a number, letter, "," or "-"
-	ErrInvaidCharInStructTag = errors.New("error: invalid character in struct tag")
-	// ErrEmptyStructTag is returned if struct tag is empty
-	ErrEmptyStructTag = errors.New("error: empty struct tag")
-	// ErrEmptyStructOptions is returned if struct tag options separator is present
-	// without an value
-	ErrEmptyStructOptions = errors.New("error: empty struct options tag")
-)
+// ErrInvaidCharInStructTag is returned if struct tag contains any invalid runes
+// character in struct tag must be a number, letter, ",", "<",">" or "-"
+var ErrInvaidCharInStructTag = errors.New("error: invalid character in struct tag")
+
+// ErrEmptyStructTag is returned if struct tag is empty
+var ErrEmptyStructTag = errors.New("error: empty struct tag")
+
+// ErrEmptyStructOptions is returned if struct tag options separator is present
+// without an value
+var ErrEmptyStructOptions = errors.New("error: empty struct options tag")
 
 func getTag(sf reflect.StructField) (string, optionTags, error) {
-	return readTag(sf.Tag.Get(StructTAG))
+	return readTag(sf.Tag.Get(StructTagString))
 }
 
 // readTag() wrapped for ease of testing
