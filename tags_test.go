@@ -5,60 +5,6 @@ import (
 	"testing"
 )
 
-func TestParseTag(t *testing.T) {
-	tests := []struct {
-		name     string
-		tag      string
-		wantTag  string
-		wantOpts []string
-	}{
-		{name: "label", tag: "mole,label", wantTag: "mole", wantOpts: []string{"label"}},
-		{name: "empty options", tag: "mole", wantTag: "mole", wantOpts: []string{}},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			tag, opts := parseTag(test.tag)
-			if tag != test.wantTag {
-				t.Errorf("wanted tag %s but got %s", test.wantTag, tag)
-			}
-			if len(opts) != len(test.wantOpts) {
-				t.Errorf("wanted %d tag options but got %d tag options", len(test.wantOpts), len(opts))
-			}
-			for k := range opts {
-				if opts[k] != test.wantOpts[k] {
-					t.Errorf("expected tag option %s but got %s", test.wantOpts[k], opts[k])
-				}
-			}
-		})
-	}
-}
-
-func TestIsValidTag(t *testing.T) {
-	tests := []struct {
-		name string
-		tag  string
-		want bool
-	}{
-		{name: "empty", tag: "", want: false},
-		{name: "hasSpace", tag: " mole ", want: false},
-		{name: "mole", tag: "mole", want: true},
-		{name: "invalidchar", tag: "mole!", want: false},
-		{name: "comma", tag: "mole,something", want: true},
-		{name: "notletterNumber", tag: "💖", want: false},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			ok := isValidTag(test.tag)
-			if ok != test.want {
-				t.Errorf("wanted tag %v but got %v for %s", test.want, ok, test.tag)
-
-			}
-		})
-	}
-}
-
 func TestReadTag(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -69,10 +15,13 @@ func TestReadTag(t *testing.T) {
 	}{
 		{"simple", "name", "name", optionTags{}, nil},
 		{"invalid", "name!", "", optionTags{}, ErrInvaidCharInStructTag},
-		{"withoption", "name,hi", "name", optionTags{"hi"}, nil},
-		{"withinvalidoption", "name,hi!", "", optionTags{}, ErrInvaidCharInStructTag},
-		{"withindirection", "name,<-hi", "name", optionTags{"<-hi"}, nil},
-		{"withoutdirection", "name,hi->", "name", optionTags{"hi->"}, nil},
+		{"with option", "name,hi", "name", optionTags{"hi"}, nil},
+		{"with invalid option", "name,hi!", "", optionTags{}, ErrInvaidCharInStructTag},
+		{"with in direction", "name,<-hi", "name", optionTags{"<-hi"}, nil},
+		{"with out direction", "name,hi->", "name", optionTags{"hi->"}, nil},
+		{"not letter not number", "name,💖->", "", optionTags{}, ErrInvaidCharInStructTag},
+		{"empty", "", "", optionTags{}, ErrEmptyStructTag},
+		{"empty options", "name,", "name", optionTags{}, nil},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
