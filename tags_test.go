@@ -21,7 +21,7 @@ func TestReadTag(t *testing.T) {
 		{"with out direction", "name,hi->", "name", optionTags{"hi->"}, nil},
 		{"not letter not number", "name,💖->", "", optionTags{}, ErrInvaidCharInStructTag},
 		{"empty", "", "", optionTags{}, ErrEmptyStructTag},
-		{"empty options", "name,", "name", optionTags{}, nil},
+		{"empty options", "name,", "", optionTags{}, ErrEmptyStructOptions},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

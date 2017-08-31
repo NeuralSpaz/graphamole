@@ -20,9 +20,12 @@ const (
 var (
 	// ErrInvaidCharInStructTag is returned if struct tag contains any invalid runes
 	// character in struct tag must be a number, letter, "," or "-"
-	ErrInvaidCharInStructTag = errors.New("invalid character in struct tags")
-	// ErrInvaidCharInStructTag is returned if struct tag is empty
-	ErrEmptyStructTag = errors.New("empty struct tags")
+	ErrInvaidCharInStructTag = errors.New("error: invalid character in struct tag")
+	// ErrEmptyStructTag is returned if struct tag is empty
+	ErrEmptyStructTag = errors.New("error: empty struct tag")
+	// ErrEmptyStructOptions is returned if struct tag options separator is present
+	// without an value
+	ErrEmptyStructOptions = errors.New("error: empty struct options tag")
 )
 
 func getTag(sf reflect.StructField) (string, optionTags, error) {
@@ -38,7 +41,7 @@ func readTag(st string) (string, optionTags, error) {
 	for _, v := range opts {
 		if err := validateTag(v); err != nil {
 			if err == ErrEmptyStructTag {
-				return tagValue, optionTags{}, nil
+				return "", optionTags{}, ErrEmptyStructOptions
 			}
 			return "", optionTags{}, err
 		}
