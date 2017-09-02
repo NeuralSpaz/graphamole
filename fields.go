@@ -5,19 +5,6 @@ import (
 	"reflect"
 )
 
-type field struct {
-	name      string
-	tag       bool
-	typ       reflect.Type
-	global    bool
-	node      bool
-	empty     bool
-	omit      bool
-	nodeID    uint
-	edgeName  string
-	edgeValue bool
-}
-
 func flattern(typ reflect.Type) error {
 
 	log.Println("DBUG: ", typ.Kind())
@@ -76,6 +63,19 @@ func flattern(typ reflect.Type) error {
 	// TODO:  check interface ?
 	return nil
 }
+
+// type field struct {
+// 	name      string
+// 	tag       bool
+// 	typ       reflect.Type
+// 	global    bool
+// 	node      bool
+// 	empty     bool
+// 	omit      bool
+// 	nodeID    uint
+// 	edgeName  string
+// 	edgeValue bool
+// }
 
 // func fillFieldbyTag(f field, tag string, opts optionTags) field {
 // 	switch tag {
