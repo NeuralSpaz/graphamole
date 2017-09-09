@@ -42,7 +42,7 @@ func getTypeInfo(typ reflect.Type) (*typeInfo, error) {
 
 		for i := 0; i < n; i++ {
 			f := typ.Field(i)
-			if (f.PkgPath != "" && !f.Anonymous) || f.Tag.Get("mole") == "-" {
+			if (f.PkgPath != "" && !f.Anonymous) || f.Tag.Get(StructTagString) == "-" {
 				continue // Unexported field, not to be inculded in type map
 			}
 
