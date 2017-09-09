@@ -4,16 +4,17 @@ import (
 	"errors"
 	"reflect"
 	"strings"
+	"sync"
 	"unicode"
 )
 
 // StructTagString modify to suit your struct tag scheme
 const StructTagString = "mole"
 
-// written so that future operators are easier to add
+// written so that future operators are easier to add or remove
 const (
-	invalidCtlRunes = "!#$%&()+./:*=?@[]^_{|}~ " // including space rune
-	validCtlRunes   = "<>,-"                     // comma dash(future use)
+	invalidCtlRunes = "!#$%&()+./*=?@[]^_{|}~ " // including space rune
+	validCtlRunes   = "<>,-:"                   // comma dash(future use)
 )
 
 // ErrInvaidCharInStructTag is returned if struct tag contains any invalid runes
@@ -26,6 +27,8 @@ var ErrEmptyStructTag = errors.New("error: empty struct tag")
 // ErrEmptyStructOptions is returned if struct tag options separator is present
 // without an value
 var ErrEmptyStructOptions = errors.New("error: empty struct options tag")
+
+var tinfoMap sync.Map // map[reflect.Type]*typeInfo
 
 func getTag(sf reflect.StructField) (string, optionTags, error) {
 	return readTag(sf.Tag.Get(StructTagString))
