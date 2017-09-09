@@ -4,7 +4,6 @@ import (
 	"errors"
 	"reflect"
 	"strings"
-	"sync"
 	"unicode"
 )
 
@@ -27,8 +26,6 @@ var ErrEmptyStructTag = errors.New("error: empty struct tag")
 // ErrEmptyStructOptions is returned if struct tag options separator is present
 // without an value
 var ErrEmptyStructOptions = errors.New("error: empty struct options tag")
-
-var tinfoMap sync.Map // map[reflect.Type]*typeInfo
 
 func getTag(sf reflect.StructField) (string, optionTags, error) {
 	return readTag(sf.Tag.Get(StructTagString))

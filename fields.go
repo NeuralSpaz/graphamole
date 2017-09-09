@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"sync"
 )
 
 type typeInfo struct {
@@ -28,6 +29,8 @@ const (
 	ffacet
 	fOmitEmpty
 )
+
+var tinfoMap sync.Map // map[reflect.Type]*typeInfo
 
 func getTypeInfo(typ reflect.Type) (*typeInfo, error) {
 	if ti, ok := tinfoMap.Load(typ); ok {
